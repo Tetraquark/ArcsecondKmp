@@ -1,0 +1,25 @@
+CREATE TABLE CoordinateSystem (
+    system_id INTEGER AS Int NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL
+);
+
+CREATE INDEX CoordinateSystem_title ON CoordinateSystem(title);
+
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (0, 'ICRS');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (1, 'FK5');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (2, 'FK4');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (3, 'FK4NoETerms');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (4, 'Galactic');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (5, 'AltAz');
+INSERT INTO CoordinateSystem (system_id, title)
+VALUES (6, 'ICRF');
+
+selectAll:
+SELECT *
+FROM CoordinateSystem;

@@ -1,0 +1,54 @@
+CREATE TABLE Exoplanet (
+    name TEXT NOT NULL PRIMARY KEY,
+    parent_star TEXT NOT NULL,
+    detection_method TEXT NOT NULL,
+    mass_detection_method TEXT NOT NULL,
+    radius_detection_method TEXT NOT NULL,
+
+    coordinates_system_id INTEGER,
+    coordinates_right_ascension REAL,
+    coordinates_right_ascension_units TEXT,
+    coordinates_declination REAL,
+    coordinates_declination_unit TEXT,
+    coordinates_epoch REAL NOT NULL,
+
+    mass_value REAL,
+    mass_unit TEXT,
+
+    radius_value REAL,
+    radius_unit TEXT,
+
+    inclination_value REAL,
+    inclination_unit TEXT,
+
+    eccentricity_value REAL,
+
+    orbital_period_value REAL,
+    orbital_period_unit TEXT,
+
+    calculated_temperature_value REAL,
+    calculated_temperature_unit TEXT,
+
+    surface_gravity_value REAL,
+    surface_gravity_unit TEXT
+);
+
+insertExoplanet:
+INSERT INTO Exoplanet(name, parent_star, detection_method, mass_detection_method, radius_detection_method,
+coordinates_system_id, coordinates_right_ascension, coordinates_right_ascension_units, coordinates_declination,
+coordinates_declination_unit, coordinates_epoch, mass_value, mass_unit, inclination_value, inclination_unit,
+eccentricity_value, orbital_period_value, orbital_period_unit, calculated_temperature_value, calculated_temperature_unit,
+surface_gravity_value, surface_gravity_unit)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectAll:
+SELECT *
+FROM Exoplanet;
+
+selectByName:
+SELECT *
+FROM Exoplanet
+WHERE name = ?;
+
+removeAll:
+DELETE FROM Exoplanet;
