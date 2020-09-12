@@ -27,6 +27,7 @@ object Deps {
 
     object Moko {
         const val mvvm = "dev.icerock.moko:mvvm:0.8.0"
+        const val parcelize = "dev.icerock.moko:parcelize:0.4.0"
     }
 
     object Android {

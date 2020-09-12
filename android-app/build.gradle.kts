@@ -52,6 +52,7 @@ android {
 dependencies {
     implementation(project(":mpp-library"))
     implementation(project(":mpp-library:feature:planets-list"))
+    implementation(project(":mpp-library:feature:planet-details"))
 
     implementation(Deps.Android.coreKtx)
     implementation(Deps.Android.appcompat)

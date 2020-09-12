@@ -8,6 +8,7 @@ import ru.tetraquark.arcsecondkmp.database.Database
 import ru.tetraquark.arcsecondkmp.model.Exoplanet
 import ru.tetraquark.arcsecondkmp.shared.data.ArcsecondApi
 import ru.tetraquark.arcsecondkmp.shared.data.ExoplanetRepository
+import ru.tetraquark.arcsecondkmp.shared.planetdetails.PlanetDetailsModuleFactory
 import ru.tetraquark.arcsecondkmp.shared.planetslist.PlanetsListModuleFactory
 
 class SharedApp(
@@ -34,7 +35,7 @@ class SharedApp(
         Database(sqlDriver, false)
     }
 
-    internal val exoplanetRepository: ExoplanetRepository by lazy {
+    private val exoplanetRepository: ExoplanetRepository by lazy {
         ExoplanetRepository(
             api = arcsecondApi,
             database = database
@@ -42,10 +43,10 @@ class SharedApp(
     }
 
     val planetsListFactory = PlanetsListModuleFactory(
-        exoplanetRepository = object : ru.tetraquark.arcsecondkmp.shared.planetslist.ExoplanetRepository {
-            override suspend fun loadExoplanets(): List<Exoplanet> {
-                return exoplanetRepository.getExoplanets(0, 10).exoplanets
-            }
-        }
+        exoplanetRepository = exoplanetRepository
+    )
+
+    val planetDetailsFactory = PlanetDetailsModuleFactory(
+        exoplanetRepository = exoplanetRepository
     )
 }

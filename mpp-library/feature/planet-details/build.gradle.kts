@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
     id("dev.icerock.mobile.multiplatform")
+    id("kotlin-android-extensions")
 }
 
 configurations {
@@ -58,6 +59,7 @@ dependencies {
     ))
 
     commonMainApi(Deps.Moko.mvvm)
+    commonMainApi(Deps.Moko.parcelize)
     commonMainApi(Deps.Kotlin.kotlinCoroutines)
 
     androidMainImplementation(Deps.Android.lifecycleExt)

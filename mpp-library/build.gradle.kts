@@ -43,6 +43,10 @@ dependencies {
         name = ":mpp-library:feature:planets-list",
         exported = true
     ))
+    mppModule(MultiPlatformModule(
+        name = ":mpp-library:feature:planet-details",
+        exported = true
+    ))
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -4,15 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,12 +17,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.createViewModelFactory
 import ru.tetraquark.arcsecondkmp.model.Exoplanet
-//import ru.tetraquark.arcsecondkmp.shared.planetslist.generator.generatePlanetBitmap
 
 class PlanetListFragment : Fragment() {
 
@@ -52,9 +46,13 @@ class PlanetListFragment : Fragment() {
                         AppBar()
                         Surface(color = MaterialTheme.colors.background) {
                             when(val state = viewModel.screenState.ld().observeAsState().value) {
-                                is State.Data -> { Planets(planets = state.data) }
+                                is State.Data -> {
+                                    Planets(planets = state.data) {
+                                        (activity as? PlanetsListRouter)?.navigateToPlanetDetails(it)
+                                    }
+                                }
                                 is State.Empty -> { Text(text = "Empty list") }
-                                is State.Loading -> { Text(text = "loading") }
+                                is State.Loading -> { LoadingState() }
                                 is State.Error -> {
                                     Text(text = "Error")
                                     state.error.printStackTrace()
@@ -68,6 +66,13 @@ class PlanetListFragment : Fragment() {
     }
 
     @Composable
+    fun LoadingState() {
+        Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center)) {
+            CircularProgressIndicator()
+        }
+    }
+
+    @Composable
     fun AppBar() {
         TopAppBar(
             title = {
@@ -77,18 +82,18 @@ class PlanetListFragment : Fragment() {
     }
 
     @Composable
-    fun Planets(planets: List<Exoplanet>) {
+    fun Planets(planets: List<Exoplanet>, onPlanetClick: (String) -> Unit) {
         Stack {
             ScrollableColumn {
                 planets.forEach {
-                    PlanetCard(planet = it)
+                    PlanetCard(it, onPlanetClick)
                 }
             }
         }
     }
 
     @Composable
-    fun PlanetCard(planet: Exoplanet) {
+    fun PlanetCard(planet: Exoplanet, onPlanetClick: (String) -> Unit) {
         Card(
             modifier = Modifier.padding(8.dp) + Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
@@ -96,21 +101,10 @@ class PlanetListFragment : Fragment() {
             Column(
                 modifier = Modifier.clickable(
                     onClick = {
-                        // TODO: onClick
+                        onPlanetClick(planet.name)
                     }
                 ) + Modifier.padding(8.dp)
             ) {
-
-/*
-                val image = generatePlanetBitmap(256, 256).asImageAsset()
-                val imageModifier = Modifier
-                    .preferredHeightIn(minHeight = 256.dp, maxHeight = 256.dp)
-                    .preferredWidthIn(minWidth = 256.dp, maxWidth = 256.dp)
-                    .fillMaxWidth()
-                    .clip(shape = MaterialTheme.shapes.medium)
-                Image(image, modifier = imageModifier, contentScale = ContentScale.Crop)
-*/
-
                 Text(
                     text = remember { "Name: ${planet.name}" },
                     style = MaterialTheme.typography.subtitle1,
