@@ -53,14 +53,13 @@ android {
 }
 
 dependencies {
-    mppModule(MultiPlatformModule(
-        name = ":model",
-        exported = true
-    ))
+    mppModule(Modules.model)
 
-    commonMainApi(Deps.Moko.mvvm)
-    commonMainApi(Deps.Moko.parcelize)
     commonMainApi(Deps.Kotlin.kotlinCoroutines)
+    commonMainApi(Deps.Moko.mvvm.common)
+    commonMainApi(Deps.Moko.parcelize.common)
+    commonMainApi(Deps.Moko.mvvm.common)
+    commonMainImplementation(Deps.oolong)
 
     androidMainImplementation(Deps.Android.lifecycleExt)
     androidMainImplementation(Deps.Android.coreKtx)

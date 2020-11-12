@@ -65,6 +65,6 @@ dependencies {
     implementation(Deps.Compose.runtime)
     implementation(Deps.Compose.runtimeLivedata)
 
-    implementation(Deps.Moko.mvvm)
+    implementation(Deps.Moko.mvvm.common)
     implementation("com.squareup.sqldelight:android-driver:${Deps.Versions.sqldelight}")
 }

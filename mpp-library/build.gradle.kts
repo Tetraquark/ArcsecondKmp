@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("dev.icerock.mobile.multiplatform")
     id("kotlin-android-extensions")
+    id("dev.icerock.mobile.multiplatform.ios-framework")
 }
 
 group = "ru.tetraquark.arcsecondkmp"
@@ -24,29 +25,61 @@ android {
     }
 }
 
+kotlin {
+//    targets.getByName<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>("iosX64").binaries.forEach {
+//        it.linkerOpts.add("-lsqlite3")
+//    }
+
+    targets.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().forEach{
+        it.binaries.filterIsInstance<org.jetbrains.kotlin.gradle.plugin.mpp.Framework>()
+            .forEach { lib ->
+                //println("DBG : ${lib.baseName}")
+                //lib.isStatic = false
+                lib.linkerOpts.add("-lsqlite3")
+            }
+    }
+}
+
+val mppLibs = listOf(
+    Deps.Moko.mvvm,
+    Deps.Moko.parcelize
+)
+val mppModules = listOf(
+    Modules.model,
+    Modules.database,
+    Modules.planetsList,
+    Modules.planetDetails
+)
+
+framework {
+    mppModules.forEach { export(it) }
+
+    export(
+        arm64Dependency = "com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}",
+        x64Dependency = "com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}"
+    )
+    mppLibs.forEach { export(it) }
+}
+
 dependencies {
     commonMainApi(Deps.Ktor.clientCio)
-    commonMainApi(Deps.Kotlin.kotlinCoroutines)
     commonMainApi(Deps.Kotlin.kotlinSerialization)
-    commonMainApi(Deps.Ktor.clientSerialization)
-    commonMainApi("com.squareup.sqldelight:runtime:${Deps.Versions.sqldelight}")
+    commonMainApi(Deps.Kotlin.kotlinCoroutines) {
+        isForce = true
+    }
+    //commonMainApi(Deps.Ktor.clientSerialization)
+    commonMainImplementation("com.squareup.sqldelight:runtime:${Deps.Versions.sqldelight}")
 
-    mppModule(MultiPlatformModule(
-        name = ":model",
-        exported = true
-    ))
-    mppModule(MultiPlatformModule(
-        name = ":database",
-        exported = true
-    ))
-    mppModule(MultiPlatformModule(
-        name = ":mpp-library:feature:planets-list",
-        exported = true
-    ))
-    mppModule(MultiPlatformModule(
-        name = ":mpp-library:feature:planet-details",
-        exported = true
-    ))
+    //"iosMainApi"("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
+    //"iosX64MainImplementation"("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
+    //"iosArm64MainImplementation"("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
+
+    iosMainImplementation("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
+
+    mppModule(Modules.model)
+    mppModule(Modules.database)
+    mppModule(Modules.planetsList)
+    mppModule(Modules.planetDetails)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

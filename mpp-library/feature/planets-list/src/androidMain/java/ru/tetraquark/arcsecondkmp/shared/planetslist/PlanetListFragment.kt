@@ -10,21 +10,20 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageAsset
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import dev.icerock.moko.mvvm.State
 import dev.icerock.moko.mvvm.createViewModelFactory
+import kotlinx.coroutines.Job
+import oolong.Dispatch
 import ru.tetraquark.arcsecondkmp.model.Exoplanet
 
 class PlanetListFragment : Fragment() {
+
+    private var oolongJob: Job? = null
 
     private val viewModel by viewModels<PlanetsListViewModel>(
         factoryProducer = {
@@ -39,24 +38,50 @@ class PlanetListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                DepsProvider.appTheme {
-                    Column {
-                        AppBar()
-                        Surface(color = MaterialTheme.colors.background) {
-                            when(val state = viewModel.screenState.ld().observeAsState().value) {
-                                is State.Data -> {
-                                    Planets(planets = state.data) {
-                                        (activity as? PlanetsListRouter)?.navigateToPlanetDetails(it)
-                                    }
+        val composeView = ComposeView(requireContext())
+        oolongJob = oolong.runtime(
+            init = initFeature(DepsProvider.planetsListModuleFactory.exoplanetRepository),
+            update = planetsListUpdate,
+            view = planetsListView,
+            render = { props, dispatch ->
+                composeView.render(props, dispatch)
+            }
+        )
+
+        return composeView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        oolongJob?.cancel()
+    }
+
+    private fun ComposeView.render(
+        viewProperties: ViewProperties,
+        dispatch: Dispatch<Message>
+    ) {
+        setContent {
+            val screenState = viewProperties.planetsListState
+            DepsProvider.appTheme {
+                Column {
+                    AppBar()
+                    Surface(color = MaterialTheme.colors.background) {
+
+                        when (screenState) {
+                            is PlanetsListState.Loading -> {
+                                LoadingState()
+                            }
+                            is PlanetsListState.Empty -> {
+                                Text(text = "Empty list")
+                            }
+                            is PlanetsListState.Data -> {
+                                Planets(planets = screenState.list) {
+                                    dispatch(Message.RouteToPlanetDetails(it))
+                                    //(activity as? PlanetsListRouter)?.navigateToPlanetDetails(it)
                                 }
-                                is State.Empty -> { Text(text = "Empty list") }
-                                is State.Loading -> { LoadingState() }
-                                is State.Error -> {
-                                    Text(text = "Error")
-                                    state.error.printStackTrace()
-                                }
+                            }
+                            is PlanetsListState.Error -> {
+                                Text(text = "Error: ${screenState.errorText}")
                             }
                         }
                     }

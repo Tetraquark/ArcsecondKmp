@@ -5,19 +5,21 @@ object Deps {
         const val targetSdkVersion = 29
         const val buildToolsVersion = "29.0.3"
 
-        const val serialization = "1.0.0-RC"
+        const val serialization = "1.0.0-RC2"
         const val sqldelight = "1.4.3"
     }
 
-    object Kotlin {
-        const val kotlin = "1.4.0"
+    const val oolong = "org.oolong-kt:oolong:2.1.0"
 
-        const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
-        const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
+    object Kotlin {
+        const val kotlin = "1.4.10"
+
+        const val kotlinSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2"
+        const val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9-native-mt-2"
     }
 
     object Ktor {
-        const val ktor = "1.4.0"
+        const val ktor = "1.4.1"
 
         const val serverJetty = "io.ktor:ktor-server-jetty:$ktor"
         const val htmlBuilder = "io.ktor:ktor-html-builder:$ktor"
@@ -26,8 +28,16 @@ object Deps {
     }
 
     object Moko {
-        const val mvvm = "dev.icerock.moko:mvvm:0.8.0"
-        const val parcelize = "dev.icerock.moko:parcelize:0.4.0"
+        val mvvm = MultiPlatformLibrary(
+            common = "dev.icerock.moko:mvvm:0.8.0",
+            iosX64 = "dev.icerock.moko:mvvm-iosx64:0.8.0",
+            iosArm64 = "dev.icerock.moko:mvvm-iosarm64:0.8.0",
+        )
+        val parcelize = MultiPlatformLibrary(
+            common = "dev.icerock.moko:parcelize:0.4.0",
+            iosX64 = "dev.icerock.moko:parcelize-iosx64:0.4.0",
+            iosArm64 = "dev.icerock.moko:parcelize-iosarm64:0.4.0",
+        )
     }
 
     object Android {
