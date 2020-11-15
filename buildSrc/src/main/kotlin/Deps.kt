@@ -23,7 +23,8 @@ object Deps {
 
         const val serverJetty = "io.ktor:ktor-server-jetty:$ktor"
         const val htmlBuilder = "io.ktor:ktor-html-builder:$ktor"
-        const val clientCio = "io.ktor:ktor-client-cio:$ktor"
+        const val client = "io.ktor:ktor-client-core:$ktor"
+        const val clientCIO = "io.ktor:ktor-client-cio:$ktor"
         const val clientSerialization = "io.ktor:ktor-client-serialization:$ktor"
     }
 
@@ -50,10 +51,11 @@ object Deps {
     }
 
     object Compose {
-        const val composeVersion = "1.0.0-alpha01"
+        const val composeVersion = "1.0.0-alpha07"
 
         const val ui = "androidx.compose.ui:ui:$composeVersion"
         const val uiTooling = "androidx.ui:ui-tooling:$composeVersion"
+        const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
         const val material = "androidx.compose.material:material:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
         const val runtimeLivedata = "androidx.compose.runtime:runtime-livedata:$composeVersion"

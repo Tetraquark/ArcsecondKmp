@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -108,7 +109,7 @@ class PlanetListFragment : Fragment() {
 
     @Composable
     fun Planets(planets: List<Exoplanet>, onPlanetClick: (String) -> Unit) {
-        Stack {
+        Box {
             ScrollableColumn {
                 planets.forEach {
                     PlanetCard(it, onPlanetClick)

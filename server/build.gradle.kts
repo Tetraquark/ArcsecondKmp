@@ -14,7 +14,7 @@ dependencies {
     //implementation("org.jetbrains.kotlin:kotlin-stdlib:${Deps.Kotlin.kotlin}")
     implementation(Deps.Ktor.serverJetty)
     implementation(Deps.Ktor.htmlBuilder)
-    implementation(Deps.Ktor.clientCio)
+    implementation(Deps.Ktor.clientCIO)
     implementation(Deps.Kotlin.kotlinSerialization)
 
     implementation("ch.qos.logback:logback-classic:1.2.3")

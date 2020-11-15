@@ -39,6 +39,7 @@ android {
     }
 
     // Compose-MPP workaround: https://github.com/avdim/compose_mpp_workaround
+
     afterEvaluate {
         val composeCompilerJar =
             configurations["composeCompiler"]
@@ -49,6 +50,7 @@ android {
             kotlinOptions.freeCompilerArgs += listOf("-Xuse-ir", "-Xplugin=$composeCompilerJar")
         }
     }
+
 }
 
 dependencies {
@@ -69,5 +71,5 @@ dependencies {
     androidMainImplementation(Deps.Compose.material)
     androidMainImplementation(Deps.Compose.runtime)
     androidMainImplementation(Deps.Compose.runtimeLivedata)
-    "composeCompiler"("androidx.compose:compose-compiler:${Deps.Compose.composeVersion}")
+    "composeCompiler"("androidx.compose.compiler:compiler:${Deps.Compose.composeVersion}")
 }

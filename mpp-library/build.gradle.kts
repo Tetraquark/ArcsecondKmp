@@ -62,7 +62,7 @@ framework {
 }
 
 dependencies {
-    commonMainApi(Deps.Ktor.clientCio)
+    commonMainApi(Deps.Ktor.client)
     commonMainApi(Deps.Kotlin.kotlinSerialization)
     commonMainApi(Deps.Kotlin.kotlinCoroutines) {
         isForce = true
@@ -75,6 +75,13 @@ dependencies {
     //"iosArm64MainImplementation"("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
 
     iosMainImplementation("com.squareup.sqldelight:native-driver:${Deps.Versions.sqldelight}")
+
+    commonMainImplementation("io.ktor:ktor-client-serialization:${Deps.Ktor.ktor}")
+    commonMainImplementation("io.ktor:ktor-client-logging:${Deps.Ktor.ktor}")
+    androidMainImplementation("io.ktor:ktor-client-android:${Deps.Ktor.ktor}")
+    iosMainImplementation("io.ktor:ktor-client-ios:${Deps.Ktor.ktor}")
+    //androidMainImplementation("io.ktor:ktor-client-serialization-jvm:${Deps.Ktor.ktor}")
+    //iosMainImplementation("io.ktor:ktor-client-serialization-native:${Deps.Ktor.ktor}")
 
     mppModule(Modules.model)
     mppModule(Modules.database)
